@@ -37,7 +37,7 @@ func (s *TCPServer) Start() error {
 		}
 	}()
 
-	return s.transport.Listen(s.opts.ListenAddr)
+	return s.transport.Listen()
 }
 
 func (s *TCPServer) Stop() error {
@@ -46,7 +46,7 @@ func (s *TCPServer) Stop() error {
 
 // transport
 type Transport interface {
-	Listen(string) error
+	Listen() error
 	Close() error
 	Messages() <-chan []byte
 }
@@ -74,7 +74,7 @@ func (t *TCPTransport) Messages() <-chan []byte {
 	return t.messagech
 }
 
-func (t *TCPTransport) Listen(string) error {
+func (t *TCPTransport) Listen() error {
 	ln, err := net.Listen("tcp", t.listenAddr)
 	if err != nil {
 		return err
