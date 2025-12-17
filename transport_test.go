@@ -1,13 +1,11 @@
 package main
 
-import "fmt"
+import "testing"
 
-func main() {
+func TestNewServer(t *testing.T) {
 	opts := ServerOpts{
 		ListenAddr: "localhost:3000",
 	}
 	s := NewTCPServer(opts)
-	if err := s.Start(); err != nil {
-		fmt.Println(err)
-	}
+	s.Start()
 }
