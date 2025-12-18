@@ -1,16 +1,18 @@
-package main
+package server
+
+import transport "github.com/Bladedancerr/server/transport"
 
 //udp server
 // must implement server
 type UDPServer struct {
-	transport Transport
+	transport transport.Transport
 	opts      ServerOpts
 }
 
 func NewUDPServer(opts ServerOpts) *UDPServer {
 	return &UDPServer{
 		opts:      opts,
-		transport: NewUDPTransport(opts.ListenAddr),
+		transport: transport.NewUDPTransport(opts.ListenAddr),
 	}
 }
 

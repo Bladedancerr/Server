@@ -1,29 +1,24 @@
-package main
+package server
 
-import "fmt"
+import (
+	"github.com/Bladedancerr/server/transport"
+)
 
 // tcp server
 // implements server interface
 type TCPServer struct {
-	transport Transport
+	transport transport.Transport
 	opts      ServerOpts
 }
 
 func NewTCPServer(opts ServerOpts) *TCPServer {
 	return &TCPServer{
 		opts:      opts,
-		transport: NewTCPTransport(opts.ListenAddr),
+		transport: transport.NewTCPTransport(opts.ListenAddr),
 	}
 }
 
 func (s *TCPServer) Start() error {
-	// for testing
-	go func() {
-		for msg := range s.transport.Messages() {
-			fmt.Println("received:", string(msg))
-		}
-	}()
-
 	return s.transport.Listen()
 }
 

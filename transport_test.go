@@ -6,6 +6,9 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	transport "github.com/Bladedancerr/server/Transport"
+	"github.com/Bladedancerr/server/server"
 )
 
 // TestTCPServer_FullLifecycle provides an end-to-end integration test.
@@ -13,10 +16,10 @@ import (
 // echo messages back to a client, and be stopped cleanly.
 func TestTCPServer_FullLifecycle(t *testing.T) {
 	// 1. Setup the server with a specific address for testing.
-	opts := ServerOpts{
+	opts := server.ServerOpts{
 		ListenAddr: "127.0.0.1:54321",
 	}
-	server := NewTCPServer(opts)
+	server := server.NewTCPServer(opts)
 
 	// 2. Start the server in a goroutine because its Start() method is blocking.
 	// We use a WaitGroup to wait for the server to shut down completely.
@@ -76,7 +79,7 @@ func TestTCPServer_FullLifecycle(t *testing.T) {
 func TestTCPTransport_Lifecycle(t *testing.T) {
 	// Use a unique address for this test.
 	addr := "127.0.0.1:54322"
-	transport := NewTCPTransport(addr)
+	transport := transport.NewTCPTransport(addr)
 
 	// The Listen method is blocking, so we run it in a goroutine
 	// and use a channel to capture its return error.
@@ -115,7 +118,7 @@ func TestTCPTransport_Lifecycle(t *testing.T) {
 // is correctly received and pushed into the public Messages channel.
 func TestTCPTransport_MessagePassing(t *testing.T) {
 	addr := "127.0.0.1:54323"
-	transport := NewTCPTransport(addr)
+	transport := transport.NewTCPTransport(addr)
 
 	go func() {
 		// We can ignore the error here as we control the lifecycle.
@@ -140,7 +143,7 @@ func TestTCPTransport_MessagePassing(t *testing.T) {
 
 	// Verify the transport forwards the message to its channel.
 	select {
-	case msg := <-transport.Messages():
+	case msg := <-transport.Requests():
 		if !reflect.DeepEqual(msg, payload) {
 			t.Errorf("Expected message %v, got %v", payload, msg)
 		}

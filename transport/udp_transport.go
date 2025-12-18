@@ -1,4 +1,4 @@
-package main
+package transport
 
 import "github.com/Bladedancerr/server/utils"
 
@@ -6,14 +6,14 @@ import "github.com/Bladedancerr/server/utils"
 // must implement transport interface
 type UDPTransport struct {
 	listenAddr string
-	messagech  chan utils.Message
+	requestch  chan utils.Request
 	quitch     chan struct{}
 }
 
 func NewUDPTransport(listenAddr string) *UDPTransport {
 	return &UDPTransport{
 		listenAddr: listenAddr,
-		messagech:  make(chan utils.Message, 100),
+		requestch:  make(chan utils.Request, 100),
 		quitch:     make(chan struct{}),
 	}
 }
@@ -26,10 +26,14 @@ func (t *UDPTransport) Close() error {
 	return nil
 }
 
+func (t *UDPTransport) WriteLoop() {
+
+}
+
 func (t *UDPTransport) ListenAddr() string {
 	return t.listenAddr
 }
 
-func (t *UDPTransport) Messages() <-chan utils.Message {
-	return t.messagech
+func (t *UDPTransport) Requests() <-chan utils.Request {
+	return t.requestch
 }
