@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	transport "github.com/Bladedancerr/server/Transport"
 	"github.com/Bladedancerr/server/server"
+	"github.com/Bladedancerr/server/transport"
 )
 
 // TestTCPServer_FullLifecycle provides an end-to-end integration test.

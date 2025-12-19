@@ -59,6 +59,7 @@ func (t *TCPTransport) acceptLoop(ln net.Listener) {
 func (t *TCPTransport) handleConn(conn net.Conn) {
 	defer conn.Close()
 	fmt.Println("new connection: ", conn.RemoteAddr())
+
 	reader := utils.NewTCPReader(conn)
 	writer := utils.NewMultiWriter(utils.NewConsoleWriter(), utils.NewTCPEchoWriter(conn))
 

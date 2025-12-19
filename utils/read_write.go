@@ -37,6 +37,31 @@ func (r *TCPReader) Read() (*Message, error) {
 	}, nil
 }
 
+// udp reader
+// implements reader interface
+type UDPReader struct {
+	conn net.PacketConn
+	buf  []byte
+}
+
+func NewUDPReader(conn net.PacketConn) *UDPReader {
+	return &UDPReader{
+		conn: conn,
+		buf:  make([]byte, 2048),
+	}
+}
+
+func (r *UDPReader) Read() (*Message, error) {
+	n, addr, err := r.conn.ReadFrom(r.buf)
+	if err != nil {
+		return nil, err
+	}
+	return &Message{
+		Addr: addr,
+		Data: r.buf[:n],
+	}, nil
+}
+
 // implements writer interface
 type ConsoleWriter struct{}
 
@@ -65,7 +90,26 @@ func (w *TCPEchoWriter) Write(msg Message) (int, error) {
 	return n, err
 }
 
-// tcp echo and console writer
+// implements writer interface
+type UDPEchoWriter struct {
+	conn net.PacketConn
+}
+
+func NewUDPEchoWriter(conn net.PacketConn) *UDPEchoWriter {
+	return &UDPEchoWriter{
+		conn: conn,
+	}
+}
+
+func (w *UDPEchoWriter) Write(msg Message) (int, error) {
+	if msg.Addr == nil {
+		return 0, fmt.Errorf("udp echo requires a destination address in the message")
+	}
+	n, err := w.conn.WriteTo(msg.Data, msg.Addr)
+	return n, err
+}
+
+// multiwriter
 // implements writer interface
 type MultiWriter struct {
 	writers []Writer

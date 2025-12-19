@@ -17,9 +17,9 @@ func NewUDPServer(opts ServerOpts) *UDPServer {
 }
 
 func (s *UDPServer) Start() error {
-	return nil
+	return s.transport.Listen()
 }
 
 func (s *UDPServer) Stop() error {
-	return nil
+	return s.transport.Close()
 }
