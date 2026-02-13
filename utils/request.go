@@ -1,5 +1,6 @@
 package utils
 
+// request created after a message creation
 type Request struct {
 	Message Message
 	Writer  Writer

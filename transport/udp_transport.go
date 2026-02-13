@@ -8,7 +8,7 @@ import (
 )
 
 // udp transport
-// must implement transport interface
+// implements transport interface
 type UDPTransport struct {
 	listenAddr string
 	requestch  chan utils.Request

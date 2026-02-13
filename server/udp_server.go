@@ -2,8 +2,8 @@ package server
 
 import transport "github.com/Bladedancerr/server/transport"
 
-//udp server
-// must implement server
+// udp server
+// implements server interface
 type UDPServer struct {
 	transport transport.Transport
 	opts      ServerOpts

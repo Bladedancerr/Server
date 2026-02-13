@@ -77,7 +77,6 @@ func TestTCPServer_FullLifecycle(t *testing.T) {
 // TestTCPTransport_Lifecycle specifically tests the Transport's ability
 // to start listening and then close cleanly.
 func TestTCPTransport_Lifecycle(t *testing.T) {
-	// Use a unique address for this test.
 	addr := "127.0.0.1:54322"
 	transport := transport.NewTCPTransport(addr)
 

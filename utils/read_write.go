@@ -5,14 +5,17 @@ import (
 	"net"
 )
 
+// reads from connection
 type Reader interface {
 	Read() (*Message, error)
 }
 
+// writes to console, file, or whatever implementation it has
 type Writer interface {
 	Write(Message) (int, error)
 }
 
+// reads from tcp connection
 // implements reader interface
 type TCPReader struct {
 	conn net.Conn
@@ -37,7 +40,7 @@ func (r *TCPReader) Read() (*Message, error) {
 	}, nil
 }
 
-// udp reader
+// reads from udp connection
 // implements reader interface
 type UDPReader struct {
 	conn net.PacketConn
@@ -62,6 +65,7 @@ func (r *UDPReader) Read() (*Message, error) {
 	}, nil
 }
 
+// simple console writer, just logs to console
 // implements writer interface
 type ConsoleWriter struct{}
 
@@ -74,6 +78,7 @@ func (w *ConsoleWriter) Write(msg Message) (int, error) {
 	return n, err
 }
 
+// writes back to tcp connection
 // implements writer interface
 type TCPEchoWriter struct {
 	conn net.Conn
@@ -90,6 +95,7 @@ func (w *TCPEchoWriter) Write(msg Message) (int, error) {
 	return n, err
 }
 
+// writes back to udp connection using connection address
 // implements writer interface
 type UDPEchoWriter struct {
 	conn net.PacketConn
@@ -109,7 +115,7 @@ func (w *UDPEchoWriter) Write(msg Message) (int, error) {
 	return n, err
 }
 
-// multiwriter
+// multiwriter, takes in as many writers as needed
 // implements writer interface
 type MultiWriter struct {
 	writers []Writer
